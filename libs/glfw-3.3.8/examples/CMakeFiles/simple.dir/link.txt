@@ -1,0 +1,1 @@
+/usr/bin/cc CMakeFiles/simple.dir/simple.c.o CMakeFiles/simple.dir/__/deps/glad_gl.c.o -o simple  -Wl,-rpath,/home/basti/Desktop/glfw-3.3.8/src ../src/libglfw.so.3.3 -lm 

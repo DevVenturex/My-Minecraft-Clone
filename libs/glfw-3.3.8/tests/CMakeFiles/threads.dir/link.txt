@@ -1,0 +1,1 @@
+/usr/bin/cc CMakeFiles/threads.dir/threads.c.o CMakeFiles/threads.dir/__/deps/tinycthread.c.o CMakeFiles/threads.dir/__/deps/glad_gl.c.o -o threads  -Wl,-rpath,/home/basti/Desktop/glfw-3.3.8/src ../src/libglfw.so.3.3 -lm -lpthread /usr/lib/x86_64-linux-gnu/librt.so 
