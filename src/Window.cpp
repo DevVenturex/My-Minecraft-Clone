@@ -8,7 +8,10 @@
 #include "Window.h"
 
 #include <iostream>
-
+#include <vector>
+#include <glm/glm.hpp>
+#include "Shader.h"
+#include "Mesh.h"
 
 void Window::Init(int width, int height, const char* title)
 {
@@ -53,8 +56,27 @@ void Window::Update()
 	framecount++;
 
 	// Render logic
-	glClearColor(1.0, 0.0, 0.0, 1.0);
+	glClearColor(0.25, 1.0, 1.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+
+	std::vector<Vertex> vertices = {
+		{glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)},
+		{glm::vec3( 0.5f, -0.5f, 0.0f), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f)},
+		{glm::vec3( 0.5f,  0.5f, 0.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)},
+		{glm::vec3(-0.5f,  0.5f, 0.0f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)},
+	};
+
+	std::vector<unsigned int> indices = {
+		0, 1, 2,
+		2, 3, 0
+	};
+
+	Shader shader("rsc/shaders/vDefault.glsl", "rsc/shaders/fDefault.glsl");
+	Mesh mesh(vertices, indices);
+
+	shader.Use();
+	mesh.Render();
 
 	// Update logic
 	if (currentTime - fps >= 1.0)
