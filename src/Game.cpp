@@ -1,7 +1,15 @@
 #include <iostream>
+#include "Window.h"
 
 int main()
 {
-	std::cout << "Hello World!" << std::endl;
+	Window window;
+	window.Init(1024, 720, "My Minecraft Clone");
+	while (!window.ShouldClose())
+	{
+		window.Update();
+	}
+
+	window.Terminate();
 	return 0;
 }
