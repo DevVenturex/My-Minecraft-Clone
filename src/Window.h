@@ -32,8 +32,10 @@ public:
 
 	static void frameBufferSizeCallback(GLFWwindow* window, int width, int height)
 	{
+		Window* win = static_cast<Window*>(glfwGetWindowUserPointer(window));
+		win->width = width;
+		win->height = height;
 		glViewport(0, 0, width, height);
-
 	}
 };
 

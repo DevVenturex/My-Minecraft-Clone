@@ -22,6 +22,8 @@ public:
 		modelView = glm::mat4(1.0f);
 		modelView = glm::translate(modelView, m_Position);
 		modelView = glm::rotate(modelView, glm::radians(m_Rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+		modelView = glm::rotate(modelView, glm::radians(m_Rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelView = glm::rotate(modelView, glm::radians(m_Rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 		modelView = glm::scale(modelView, m_Scale);
 		return modelView;
 	}
