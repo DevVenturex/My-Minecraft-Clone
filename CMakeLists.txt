@@ -9,7 +9,12 @@ set(CMAKE_CXX_STANDARD 20)
 set(LIB_DIR "${PROJECT_SOURCE_DIR}/libs")
 
 # Add source files
-file(GLOB SRC_FILES "src/Game.cpp" "src/Window.cpp" "src/Shader.cpp" "src/Mesh.cpp")
+file(GLOB SRC_FILES 
+	"src/Game.cpp"
+	"src/Window.cpp"
+	"src/Shader.cpp"
+	"src/Mesh.cpp"
+)
 
 # This project will output an executable file
 add_executable(${PROJECT_NAME} ${SRC_FILES})

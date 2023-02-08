@@ -22,6 +22,7 @@ private:
 	double fps = 0.0;
 
 public:
+	int width, height;
 	Window() : m_Window(nullptr) {}
 
 	void Init(int width, int height, const char* title);
@@ -29,10 +30,10 @@ public:
 	bool ShouldClose();
 	void Terminate();
 
-private:
 	static void frameBufferSizeCallback(GLFWwindow* window, int width, int height)
 	{
 		glViewport(0, 0, width, height);
+
 	}
 };
 

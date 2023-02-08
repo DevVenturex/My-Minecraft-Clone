@@ -10,11 +10,18 @@
 #include <iostream>
 #include <vector>
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include "Shader.h"
 #include "Mesh.h"
+#include "Transform.h"
+#include "Camera.h"
+#include "Input.h"
 
 void Window::Init(int width, int height, const char* title)
 {
+	this->width = width;
+	this->height = height;
+
 	if (!glfwInit())
 	{
 		std::cerr << "Failed to initialize GLFW" << std::endl;
@@ -36,13 +43,17 @@ void Window::Init(int width, int height, const char* title)
 
 	glfwMakeContextCurrent(m_Window);
 
+	glfwSetFramebufferSizeCallback(m_Window, frameBufferSizeCallback);
+
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
 		std::cerr << "Failed to initialize GLAD" << std::endl;
 		return;
 	}
 
-	glfwSetFramebufferSizeCallback(m_Window, frameBufferSizeCallback);
+
+
+	glEnable(GL_DEPTH_TEST);
 }
 
 void Window::Update()
@@ -55,27 +66,43 @@ void Window::Update()
 	currentTime = newTime;
 	framecount++;
 
+
+
 	// Render logic
 	glClearColor(0.25, 1.0, 1.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
 	std::vector<Vertex> vertices = {
-		{glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)},
-		{glm::vec3( 0.5f, -0.5f, 0.0f), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f)},
-		{glm::vec3( 0.5f,  0.5f, 0.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)},
-		{glm::vec3(-0.5f,  0.5f, 0.0f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)},
+		{glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)},
+		{glm::vec3( 0.5f, -0.5f,  0.5f), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f)},
+		{glm::vec3( 0.5f,  0.5f,  0.5f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)},
+		{glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)},
+		{glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f)},
+		{glm::vec3( 0.5f, -0.5f, -0.5f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)},
+		{glm::vec3( 0.5f,  0.5f, -0.5f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)},
+		{glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f)},
 	};
 
+
 	std::vector<unsigned int> indices = {
-		0, 1, 2,
-		2, 3, 0
+	    0, 1, 2, 2, 3, 0,
+	    4, 5, 6, 6, 7, 4,
+	    3, 2, 6, 6, 7, 3,
+	    0, 1, 5, 5, 4, 0,
+	    1, 2, 6, 6, 5, 1,
+	    0, 3, 7, 7, 4, 0,
 	};
 
 	Shader shader("rsc/shaders/vDefault.glsl", "rsc/shaders/fDefault.glsl");
 	Mesh mesh(vertices, indices);
+	Transform trans(glm::vec3(0.0f, 0.0f, -3.0f), glm::vec3(45.0f, 45.0f, 0.0f), glm::vec3(1.0f));
+	Camera cam;
 
 	shader.Use();
+	shader.SetMat4f("projection", cam.GetProjectionMatrix(45.0f, (float) (width / height), 0.1f, 100.0f));
+	shader.SetMat4f("view", cam.GetViewMatrix());
+	shader.SetMat4f("model", trans.GetModelViewMatrix());
 	mesh.Render();
 
 	// Update logic
@@ -83,6 +110,7 @@ void Window::Update()
 	{
 		fps = currentTime;
 		std::cout << "FPS: " << framecount << std::endl;
+
 		framecount = 0;
 	}
 
