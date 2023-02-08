@@ -76,59 +76,65 @@ void Window::Update()
 
 
 	std::vector<Vertex> vertices = {
+			// ================================================================================================================
 			// Front
-			{glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), glm::vec2(0.0f, 0.0f)}, // Left Bottom = 0
-			{glm::vec3( 0.5f, -0.5f,  0.5f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 0.0f)}, // Right Bottom = 1
-			{glm::vec3( 0.5f,  0.5f,  0.5f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 1.0f)}, // Right Top = 2
-			{glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 1.0f)}, // Left Top = 3
+			{glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 0.0f)}, // Left Top = 0
+			{glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 0.5f)}, // Left Bottom = 1
+			{glm::vec3( 0.5f, -0.5f,  0.5f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(0.5f, 0.5f)}, // Right Bottom = 2
+			{glm::vec3( 0.5f,  0.5f,  0.5f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(0.5f, 0.0f)}, // Right Top = 3
 			// Back
-			{glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), glm::vec2(0.0f, 0.0f)}, // Left Bottom = 4
-			{glm::vec3( 0.5f, -0.5f, -0.5f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 0.0f)}, // Right Bottom = 5
-			{glm::vec3( 0.5f,  0.5f, -0.5f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), glm::vec2(1.0f, 1.0f)}, // Right Top = 6
-			{glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), glm::vec2(0.0f, 1.0f)}, // Left Top = 7
-			// Left
-			{glm::vec3( 0.5f, -0.5f, -0.5f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 0.0f)}, // Left Bottom = 8
-			{glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), glm::vec2(0.0f, 0.0f)}, // Right Bottom = 9
-			{glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 1.0f)}, // Right Top = 10
-			{glm::vec3( 0.5f,  0.5f,  0.5f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 1.0f)}, // Left Top = 11
-			// Right
-			{glm::vec3( 0.5f, -0.5f,  0.5f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 0.0f)}, // Left Bottom = 12
-			{glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), glm::vec2(0.0f, 0.0f)}, // Right Bottom = 13
-			{glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), glm::vec2(0.0f, 1.0f)}, // Right Top = 14
-			{glm::vec3( 0.5f,  0.5f,  0.5f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 1.0f)}, // Right Top = 15
-			// Top
-			{glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 1.0f)}, // Left Bottom = 16
-			{glm::vec3( 0.5f,  0.5f,  0.5f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 1.0f)}, // Right Bottom = 17
-			{glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), glm::vec2(0.0f, 1.0f)}, // Right Top = 18
-			{glm::vec3( 0.5f,  0.5f, -0.5f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), glm::vec2(1.0f, 1.0f)}, // Left Top = 19
-			// Bottom
-			{glm::vec3( 0.5f, -0.5f, -0.5f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 0.0f)}, // Left Bottom = 20
-			{glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), glm::vec2(0.0f, 0.0f)}, // Right Bottom = 21
-			{glm::vec3( 0.5f, -0.5f,  0.5f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 0.0f)}, // Right Top = 22
-			{glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), glm::vec2(0.0f, 0.0f)}, // Left Bottom = 23
+			{glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 0.0f)}, // Right Top = 4
+			{glm::vec3( 0.5f,  0.5f, -0.5f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(0.5f, 0.0f)}, // Left Top = 5
+			{glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 0.5f)}, // Right Bottom = 6
+			{glm::vec3( 0.5f, -0.5f, -0.5f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(0.5f, 0.5f)}, // Left Bottom = 7
+			// ================================================================================================================
+
+			// For text coords in top face
+			{glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 0.5f)}, // 4
+			{glm::vec3( 0.5f,  0.5f, -0.5f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(0.5f, 0.5f)}, // 5
+			{glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 1.0f)}, // 0
+			{glm::vec3( 0.5f,  0.5f,  0.5f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(0.5f, 1.0f)}, // 3
+
+			// For text coords in right face
+			{glm::vec3( 0.5f,  0.5f,  0.5f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 0.0f)}, // 3
+			{glm::vec3( 0.5f, -0.5f,  0.5f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 0.5f)}, // 2
+
+			// For text coords in left face
+			{glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(0.5f, 0.0f)}, // 0
+			{glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(0.5f, 0.5f)}, // 1
+
+			// For text coords in bottom face
+			{glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(0.5f, 0.0f)}, // 6
+			{glm::vec3( 0.5f, -0.5f, -0.5f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 0.0f)}, // 7
+			{glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(0.5f, 0.5f)}, // 1
+			{glm::vec3( 0.5f, -0.5f,  0.5f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 0.5f)}, // 2
 	};
 
 	std::vector<unsigned int> indices = {
-			0, 1, 2, 2, 3, 0,
-			4, 5, 6, 6, 7, 4,
-			4, 5, 1, 1, 0, 4,
-			6, 7, 3, 3, 2, 6,
-			5, 6, 2, 2, 1, 5,
-			7, 4, 0, 0, 3, 7,
-
-			8, 9, 10, 10, 11, 8,
-			12, 13, 14, 14, 15, 12,
-			16, 17, 18, 18, 19, 16,
-			20, 21, 22, 22, 23, 20
+            // Front face
+            0, 1, 3, 3, 1, 2,
+            // Top Face
+            8, 10, 11, 9, 8, 11,
+            // Right face
+            12, 13, 7, 5, 12, 7,
+            // Left face
+            14, 15, 6, 4, 14, 6,
+            // Bottom face
+            16, 18, 19, 17, 16, 19,
+            // Back face
+            4, 6, 7, 5, 4, 7,
 	};
 
 	Shader shader("rsc/shaders/vDefault.glsl", "rsc/shaders/fDefault.glsl");
 	Mesh mesh(vertices, indices);
 	Texture tex("rsc/textures/grass.png");
-	Transform trans(glm::vec3(0.0f, 0.0f, -3.0f), glm::vec3(45.0f, 45.0f, 0.0f), glm::vec3(1.0f));
+	Transform trans(glm::vec3(0.0f, 0.0f, -3.0f), glm::vec3(-45.0f, 45.0f, 0.0f), glm::vec3(1.0f));
 	Camera cam;
 
 	float aspectRatio = (float) width / (float) height;
+
+	trans.SetRotation(trans.GetRotation().x, trans.GetRotation().y + 5, trans.GetRotation().z);
+	std::cout << trans.GetRotation().y << std::endl;
 
 	shader.Use();
 	shader.SetMat4f("projection", cam.GetProjectionMatrix(45.0f, aspectRatio, 0.1f, 100.0f));
@@ -136,6 +142,8 @@ void Window::Update()
 	shader.SetMat4f("model", trans.GetModelViewMatrix());
 	tex.Use();
 	mesh.Render();
+
+
 
 	// Update logic
 	if (currentTime - fps >= 1.0)

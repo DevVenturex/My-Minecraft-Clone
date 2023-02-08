@@ -14,26 +14,55 @@
 class Transform
 {
 public:
-	Transform() : m_Position(glm::vec3(0.0f)), m_Rotation(glm::vec3(0.0f)), m_Scale(glm::vec3(1.0f)) {}
-	Transform(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale) : m_Position(position), m_Rotation(rotation), m_Scale(scale) {}
+
+
+	Transform() : position(glm::vec3(0.0f)), rotation(glm::vec3(0.0f)), scale(glm::vec3(1.0f)) { UpdateModelViewMatrix(); }
+	Transform(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale) : position(position), rotation(rotation), scale(scale) { UpdateModelViewMatrix(); }
 
 	glm::mat4 GetModelViewMatrix()
 	{
-		modelView = glm::mat4(1.0f);
-		modelView = glm::translate(modelView, m_Position);
-		modelView = glm::rotate(modelView, glm::radians(m_Rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-		modelView = glm::rotate(modelView, glm::radians(m_Rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-		modelView = glm::rotate(modelView, glm::radians(m_Rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
-		modelView = glm::scale(modelView, m_Scale);
 		return modelView;
 	}
 
+	void SetRotation(float x, float y, float z)
+	{
+		rotation = glm::vec3(x, y, z);
+		UpdateModelViewMatrix();
+	}
+
+	void SetPosition(float x, float y, float z)
+	{
+		position = glm::vec3(x, y, z);
+		UpdateModelViewMatrix();
+	}
+
+	void SetScale(float x, float y, float z)
+	{
+		scale = glm::vec3(x, y, z);
+		UpdateModelViewMatrix();
+	}
+
+
+	glm::vec3 GetRotation() { return rotation; }
+	glm::vec3 GetPosition() { return position; }
+	glm::vec3 GetScale() { return scale; }
+
 private:
-	glm::vec3 m_Position;
-	glm::vec3 m_Rotation;
-	glm::vec3 m_Scale;
+	glm::vec3 position;
+	glm::vec3 rotation;
+	glm::vec3 scale;
 
 	glm::mat4 modelView;
+
+	void UpdateModelViewMatrix()
+	{
+		modelView = glm::mat4(1.0f);
+		modelView = glm::translate(modelView, position);
+		modelView = glm::rotate(modelView, glm::radians(rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+		modelView = glm::rotate(modelView, glm::radians(rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelView = glm::rotate(modelView, glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+		modelView = glm::scale(modelView, scale);
+	}
 };
 
 
