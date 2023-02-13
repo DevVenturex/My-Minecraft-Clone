@@ -16,7 +16,7 @@
 #include "Transform.h"
 #include "Camera.h"
 #include "Input.h"
-#include "Texture.h"
+//#include "Texture.h"
 
 void Window::Init(int width, int height, const char* title)
 {
@@ -29,8 +29,8 @@ void Window::Init(int width, int height, const char* title)
 		return;
 	}
 
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_RESIZABLE, true);
 
@@ -116,8 +116,7 @@ void Window::Update()
 	};
 
 	Shader shader("rsc/shaders/vDefault.glsl", "rsc/shaders/fDefault.glsl");
-	Mesh mesh(vertices, indices);
-	Texture tex("rsc/textures/grass.png");
+	Mesh mesh(vertices, indices, "rsc/textures/grass.png");
 	Transform trans(glm::vec3(0.0f, 0.0f, -3.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f));
 	Camera cam(glm::vec3(0.0f, 2.0f, 5.0f));
 
@@ -142,6 +141,10 @@ void Window::Update()
 			cam.ProcessKeyboard(Input::Direction::LEFT, deltaTime);
 		if (Input::IsKeyPressed(GLFW_KEY_D))
 			cam.ProcessKeyboard(Input::Direction::RIGHT, deltaTime);
+		if (Input::IsKeyPressed(GLFW_KEY_SPACE))
+			cam.ProcessKeyboard(Input::Direction::Up, deltaTime);
+		if (Input::IsKeyPressed(GLFW_KEY_LEFT_SHIFT))
+			cam.ProcessKeyboard(Input::Direction::Down, deltaTime);
 
 		cam.ProcessMouseMovement((float) Input::GetOffsetX(), (float) Input::GetOffsetY(), true);
 
@@ -157,7 +160,6 @@ void Window::Update()
 		shader.SetMat4f("projection", projMatrix);
 		shader.SetMat4f("view", cam.GetViewMatrix());
 		shader.SetMat4f("model", trans.GetModelViewMatrix());
-		tex.Use();
 		mesh.Render();
 
 		trans.SetRotation(trans.GetRotation().x, trans.GetRotation().y, trans.GetRotation().z);
@@ -169,9 +171,6 @@ void Window::Update()
 		{
 			fps = currentTime;
 			std::cout << "FPS: " << framecount << std::endl;
-
-			std::cout << "X Offset: " << Input::GetOffsetX() << std::endl;
-			std::cout << "Y Offset: " << Input::GetOffsetY() << std::endl;
 
 			framecount = 0;
 		}

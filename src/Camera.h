@@ -30,18 +30,18 @@ public:
     glm::vec3 worldUp;
     glm::vec3 right;
     glm::mat4 viewMatrix;
-    float pitch, yaw;
 
+    float yaw = YAW, pitch = PITCH;
     float mouseSensitivity;
     float speed;
 
-    Camera() : position(glm::vec3(0.0f, 0.0f, 0.0f)), front(glm::vec3(0.0f, 0.0f, -1.0f)), up(glm::vec3(0.0f, 1.0f, 0.0f)), pitch(PITCH), yaw(YAW), mouseSensitivity(SENSITIVITY), speed(SPEED)
+    Camera() : position(glm::vec3(0.0f, 0.0f, 0.0f)), front(glm::vec3(0.0f, 0.0f, -1.0f)), up(glm::vec3(0.0f, 1.0f, 0.0f)), mouseSensitivity(SENSITIVITY), speed(SPEED)
     {
     	worldUp = up;
         UpdateViewMatrix();
     }
 
-    Camera(glm::vec3 position) : position(position), front(glm::vec3(0.0f, 0.0f, -1.0f)), up(glm::vec3(0.0f, 1.0f, 0.0f)), pitch(PITCH), yaw(YAW), mouseSensitivity(SENSITIVITY), speed(SPEED)
+    Camera(glm::vec3 position) : position(position), front(glm::vec3(0.0f, 0.0f, -1.0f)), up(glm::vec3(0.0f, 1.0f, 0.0f)), mouseSensitivity(SENSITIVITY), speed(SPEED)
     {
     	worldUp = up;
     	UpdateViewMatrix();
@@ -58,6 +58,10 @@ public:
     		position -= right * velocity;
     	if (direction == Input::Direction::RIGHT)
     		position += right * velocity;
+    	if (direction == Input::Direction::Up)
+    	    position += worldUp * velocity;
+    	if (direction == Input::Direction::Down)
+    		position -= worldUp * velocity;
 
     	UpdateViewMatrix();
     }
@@ -78,8 +82,12 @@ public:
     			pitch = -89.0f;
     	}
 
+    	Input::SetOffsetX(0.0);
+    	Input::SetOffsetY(0.0);
+
     	UpdateViewMatrix();
     }
+
 
     glm::mat4 GetViewMatrix()
     {
@@ -91,7 +99,6 @@ public:
         return glm::perspective(glm::radians(fov), aspectRatio, nearPlane, farPlane);
     }
 
-private:
     void UpdateViewMatrix()
     {
         front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
@@ -102,6 +109,7 @@ private:
         right = glm::normalize(glm::cross(front, worldUp));
         up = glm::normalize(glm::cross(right, front));
     }
+
 };
 
 #endif /* CAMERA_H_ */

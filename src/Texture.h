@@ -41,6 +41,8 @@ public:
 	        std::cout << "Failed to load texture" << std::endl;
 	    }
 	    stbi_image_free(data);
+
+	    glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
 	void Use()

@@ -18,7 +18,9 @@ namespace Input
 		FORWARD,
 		BACKWARD,
 		LEFT,
-		RIGHT
+		RIGHT,
+		Up,
+		Down
 	};
 
 	bool keysPressed[GLFW_KEY_LAST];
@@ -54,18 +56,18 @@ namespace Input
     void CursorPosCallback(GLFWwindow* window, double xposIn, double yposIn)
     {
     	float xpos = static_cast<float>(xposIn);
-    	float ypos = static_cast<float>(yposIn);
-    	if (firstMouse)
-    	{
-			lastX = xpos;
-			lastY = ypos;
-			firstMouse = false;
-		}
+        float ypos = static_cast<float>(yposIn);
+        if (firstMouse)
+        {
+        	lastX = xpos;
+    		lastY = ypos;
+    		firstMouse = false;
+    	}
 
-    	xoffset = xpos - lastX;
-    	yoffset = lastY - ypos;
-    	lastX = xpos;
-    	lastY = ypos;
+        xoffset = xpos - lastX;
+        yoffset = lastY - ypos;
+        lastX = xpos;
+        lastY = ypos;
     }
 
     bool IsKeyPressed(int key)
@@ -78,9 +80,19 @@ namespace Input
         return mouseButtonPressed[button];
     }
 
+    void SetOffsetX(double off)
+    {
+    	xoffset = off;
+    }
+
     double GetOffsetX()
     {
         return xoffset;
+    }
+
+    void SetOffsetY(double off)
+    {
+    	yoffset = off;
     }
 
     double GetOffsetY()
