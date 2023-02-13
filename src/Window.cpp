@@ -46,6 +46,10 @@ void Window::Init(int width, int height, const char* title)
 
 	glfwSetWindowUserPointer(m_Window, this);
 	glfwSetFramebufferSizeCallback(m_Window, frameBufferSizeCallback);
+	glfwSetKeyCallback(m_Window, Input::KeyCallback);
+	glfwSetCursorPosCallback(m_Window, Input::CursorPosCallback);
+
+	glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
@@ -60,20 +64,6 @@ void Window::Init(int width, int height, const char* title)
 
 void Window::Update()
 {
-	if (!m_Window) return;
-
-	// Delta time
-	double newTime = glfwGetTime();
-	deltaTime = newTime - currentTime;
-	currentTime = newTime;
-	framecount++;
-
-
-
-	// Render logic
-	glClearColor(0.25, 1.0, 1.0, 1.0);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 
 	std::vector<Vertex> vertices = {
 			// ================================================================================================================
@@ -128,34 +118,67 @@ void Window::Update()
 	Shader shader("rsc/shaders/vDefault.glsl", "rsc/shaders/fDefault.glsl");
 	Mesh mesh(vertices, indices);
 	Texture tex("rsc/textures/grass.png");
-	Transform trans(glm::vec3(0.0f, 0.0f, -3.0f), glm::vec3(-45.0f, 45.0f, 0.0f), glm::vec3(1.0f));
-	Camera cam;
-
-	float aspectRatio = (float) width / (float) height;
-
-	trans.SetRotation(trans.GetRotation().x, trans.GetRotation().y + 5, trans.GetRotation().z);
-	std::cout << trans.GetRotation().y << std::endl;
-
-	shader.Use();
-	shader.SetMat4f("projection", cam.GetProjectionMatrix(45.0f, aspectRatio, 0.1f, 100.0f));
-	shader.SetMat4f("view", cam.GetViewMatrix());
-	shader.SetMat4f("model", trans.GetModelViewMatrix());
-	tex.Use();
-	mesh.Render();
+	Transform trans(glm::vec3(0.0f, 0.0f, -3.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f));
+	Camera cam(glm::vec3(0.0f, 2.0f, 5.0f));
 
 
 
-	// Update logic
-	if (currentTime - fps >= 1.0)
+	while (!ShouldClose())
 	{
-		fps = currentTime;
-		std::cout << "FPS: " << framecount << std::endl;
+		if (!m_Window) return;
 
-		framecount = 0;
+		// Delta time
+		double newTime = glfwGetTime();
+		deltaTime = newTime - currentTime;
+		currentTime = newTime;
+		framecount++;
+
+		// Input
+		if (Input::IsKeyPressed(GLFW_KEY_W))
+			cam.ProcessKeyboard(Input::Direction::FORWARD, deltaTime);
+		if (Input::IsKeyPressed(GLFW_KEY_S))
+			cam.ProcessKeyboard(Input::Direction::BACKWARD, deltaTime);
+		if (Input::IsKeyPressed(GLFW_KEY_A))
+			cam.ProcessKeyboard(Input::Direction::LEFT, deltaTime);
+		if (Input::IsKeyPressed(GLFW_KEY_D))
+			cam.ProcessKeyboard(Input::Direction::RIGHT, deltaTime);
+
+		cam.ProcessMouseMovement((float) Input::GetOffsetX(), (float) Input::GetOffsetY(), true);
+
+		// Render logic
+		glClearColor(0.25, 1.0, 1.0, 1.0);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		float aspectRatio = (float) width / (float) height;
+
+		glm::mat4 projMatrix = cam.GetProjectionMatrix(45.0f, aspectRatio, 0.1f, 100.0f);
+
+		shader.Use();
+		shader.SetMat4f("projection", projMatrix);
+		shader.SetMat4f("view", cam.GetViewMatrix());
+		shader.SetMat4f("model", trans.GetModelViewMatrix());
+		tex.Use();
+		mesh.Render();
+
+		trans.SetRotation(trans.GetRotation().x, trans.GetRotation().y, trans.GetRotation().z);
+
+
+
+		// Update logic
+		if (currentTime - fps >= 1.0)
+		{
+			fps = currentTime;
+			std::cout << "FPS: " << framecount << std::endl;
+
+			std::cout << "X Offset: " << Input::GetOffsetX() << std::endl;
+			std::cout << "Y Offset: " << Input::GetOffsetY() << std::endl;
+
+			framecount = 0;
+		}
+
+		glfwSwapBuffers(m_Window);
+		glfwPollEvents();
 	}
-
-	glfwSwapBuffers(m_Window);
-	glfwPollEvents();
 }
 
 bool Window::ShouldClose()

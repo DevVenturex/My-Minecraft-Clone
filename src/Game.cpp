@@ -5,10 +5,7 @@ int main()
 {
 	Window window;
 	window.Init(1024, 720, "My Minecraft Clone");
-	while (!window.ShouldClose())
-	{
-		window.Update();
-	}
+	window.Update();
 
 	window.Terminate();
 	return 0;
