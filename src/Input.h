@@ -75,6 +75,16 @@ namespace Input
         return keysPressed[key];
     }
 
+    bool IsKeyJustPressed(int key)
+    {
+    	if (keysPressed[key])
+    	{
+    		keysPressed[key] = false;
+    		return true;
+    	}
+    	return false;
+    }
+
     bool IsMouseButtonPressed(int button)
     {
         return mouseButtonPressed[button];

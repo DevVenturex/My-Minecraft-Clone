@@ -14,6 +14,7 @@
 #include "Shader.h"
 #include "Camera.h"
 #include "Input.h"
+#include "Block.h"
 
 void Window::Init(int width, int height, const char* title)
 {
@@ -63,6 +64,19 @@ void Window::Update()
 {
 	Shader shader("rsc/shaders/vDefault.glsl", "rsc/shaders/fDefault.glsl");
 	Camera cam(glm::vec3(0.0f, 2.0f, 5.0f));
+	std::vector<Block> blocks = {};
+
+	for (int x = 0; x < 5; x++)
+	{
+		for (int z = 0; z < 5; z++)
+		{
+			Block b(x, 0, z, BlockType::GRASS_BLOCK);
+			blocks.push_back(b);
+		}
+	}
+
+	bool cursor = false;
+	bool wireframe = false;
 
 	while (!ShouldClose())
 	{
@@ -73,6 +87,20 @@ void Window::Update()
 		deltaTime = newTime - currentTime;
 		currentTime = newTime;
 		framecount++;
+
+		if (Input::IsKeyJustPressed(GLFW_KEY_ESCAPE))
+		{
+			if (cursor)
+			{
+				glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+				cursor = false;
+			}
+			else
+			{
+				glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+				cursor = true;
+			}
+		}
 
 		// Input
 		if (Input::IsKeyPressed(GLFW_KEY_W))
@@ -102,6 +130,13 @@ void Window::Update()
 		shader.SetMat4f("projection", projMatrix);
 		shader.SetMat4f("view", cam.GetViewMatrix());
 
+		for (Block b : blocks)
+		{
+			shader.SetMat4f("model", b.GetTransform().GetModelViewMatrix());
+			b.Update(deltaTime);
+			b.Render();
+		}
+
 		// Update logic
 		if (currentTime - fps >= 1.0)
 		{
@@ -115,6 +150,8 @@ void Window::Update()
 		glfwPollEvents();
 	}
 }
+
+
 
 bool Window::ShouldClose()
 {

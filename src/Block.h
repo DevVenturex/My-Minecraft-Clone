@@ -22,17 +22,34 @@ enum BlockType
 
 class Block {
 public:
-
-
 	Block(int x, int y, int z, BlockType type);
 
 	void Update(double deltaTime);
 	void Render();
 
+	Mesh GetMesh()
+	{
+		Mesh m = *mesh;
+		return m;
+	}
+
+	Transform GetTransform()
+	{
+		Transform t = *transform;
+		return t;
+	}
+
+	Texture GetTexture()
+	{
+		Texture t = *texture;
+		return t;
+	}
+
 private:
 	bool hasGravity = false;
 	Mesh* mesh;
 	Transform* transform;
+	Texture* texture;
 
 	std::vector<Vertex> vertices = {
 			// ================================================================================================================

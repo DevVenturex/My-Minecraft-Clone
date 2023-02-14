@@ -15,6 +15,7 @@ file(GLOB SRC_FILES
 	"src/Shader.cpp"
 	"src/Mesh.cpp"
 	"src/Block.cpp"
+	"src/Texture.cpp"
 )
 
 # This project will output an executable file
